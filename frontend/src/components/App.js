@@ -13,8 +13,12 @@ import Search from "./Search"
 import Signup from "./Signup"
 
 function App() {
+
+  const [alert, setAlert] = useState(null)
+  const [user, setUser] = useState("")
+
   return (
-    <div className="">
+    <div className="fill-parent">
       <BrowserRouter>
         <Navbar collapseOnSelect expand="md" bg="dark" variant="dark" >
           <Container fluid>
@@ -38,18 +42,32 @@ function App() {
                 </Nav>
 
                 <Nav>
+                  { user ? (
                   <Navbar.Text>
+                    Signed in as 
+                    <Link to={"/profile" + user}>{user}</Link> | {" "}
+                    <Button 
+                      type='button' 
+                      variant='primary' 
+                      onClick={() => {setUser(""); setAlert({variant: "warning", message: "you are signed out"})}}> Logout
+                    </Button>
+                  </Navbar.Text> )
+                :
+                  (<Navbar.Text>
                     <Link to="/login">Not Signed in</Link>
-                  </Navbar.Text>
+                  </Navbar.Text>)
+                }
                 </Nav>
               </Navbar.Collapse>
           </Container>
         </Navbar>
 
+        { alert ?  <AlertDismissible {...alert} deleteAlert={() => setAlert(null)} /> : null}
+
          <Routes>
             <Route element={<AllPosts/>} path="/" exact/>
             <Route element={<Login/>} path="/login"/>
-            <Route element={<Signup/>} path="/sign-up"/>
+            <Route element={<Signup setAlert={setAlert} setUser={setUser}/>} path="/sign-up"/>
             <Route element={<Profile/>} path="/profile/:username"/>
             <Route element={<Search/>} path="/search"/>
             <Route element={<CreatePost/>} path="/create-post"/>

@@ -1,8 +1,8 @@
-import { SanityClient } from "@sanity/client"
+import sanityClient from "@sanity/client"
 import dotenv from "dotenv"
 dotenv.config()
-
-export default SanityClient()({
+//"x5e3rut6"
+export default sanityClient({
     projectId: "x5e3rut6",
     dataset: "production",
     usecdn: false,
