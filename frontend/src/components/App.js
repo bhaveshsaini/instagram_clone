@@ -54,7 +54,7 @@ function App() {
                   </Navbar.Text> )
                 :
                   (<Navbar.Text>
-                    <Link to="/login">Not Signed in</Link>
+                    <Link to="/login">Not Signed in</Link> 
                   </Navbar.Text>)
                 }
                 </Nav>
