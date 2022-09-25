@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Form, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
-import "../css/signup.css"
 
 export default function Signup({setAlert, setUser}) {
     const [firstName, setFirstname] = useState("")
@@ -47,7 +46,7 @@ export default function Signup({setAlert, setUser}) {
         setUsername(e.target.value)
     }
 
-    return <Form className="sign-up-form">
+    return <Form className="center-form">
         <Form.Group className="mb-4">
             <Form.Label>Username</Form.Label>
             <Form.Control type="text" placeholder="Username" onInput={updateUsername}/>
