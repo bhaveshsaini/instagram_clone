@@ -11,4 +11,4 @@ export default function Alertdismissible(message, variant, deleteAlert) {
     else {
         return null
     }
-}
+} 

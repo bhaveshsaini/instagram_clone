@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Form, Button } from "react-bootstrap"
+import { Form, Button, Alert } from "react-bootstrap"
 import { useNavigate, Link } from "react-router-dom"
 
 export default function Login({setAlert, setUser}) {
@@ -11,12 +11,13 @@ export default function Login({setAlert, setUser}) {
         .then((res) => res.json())
         .then((data) => {
             if (data.length > 0) {
-                setAlert({variant: "success", message: "successfully logged in"})
+                // setAlert({variant: "success", message: "successfully logged in"})
                 setUser(data[0].username)
                 navigate("/")
             }
             else{
-                setAlert({variant: "danger", message: "No user found"})
+                // setAlert({variant: "danger", message: "No user found"})
+                navigate("/login")
             }
         }).catch((e) => setAlert({variant: "danger", message: e}))
     }

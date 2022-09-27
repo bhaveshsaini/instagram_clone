@@ -44,12 +44,12 @@ function App() {
                 <Nav>
                   { user ? (
                   <Navbar.Text>
-                    Signed in as 
-                    <Link to={"/profile" + user}>{user}</Link> | {" "}
+                    Signed in as
+                    <Link  style={{textDecoration: 'none'}} to={"/profile" + user}>{" " + user}</Link> | {" "}
                     <Button 
                       type='button' 
                       variant='primary' 
-                      onClick={() => {setUser(""); setAlert({variant: "warning", message: "you are signed out"})}}> Logout
+                      onClick={() => {setUser("")}}> Logout
                     </Button>
                   </Navbar.Text> )
                 :
@@ -62,7 +62,8 @@ function App() {
           </Container>
         </Navbar>
 
-        { alert ?  <AlertDismissible {...alert} deleteAlert={() => setAlert(null)} /> : null}
+        {/* Alert functionality not working. Need to fix */}
+        {/* { alert ? (<AlertDismissible {...alert} deleteAlert={() => setAlert(null)} />) : null} */} 
 
          <Routes>
             <Route element={<AllPosts/>} path="/" exact/>
@@ -70,7 +71,7 @@ function App() {
             <Route element={<Signup setAlert={setAlert} setUser={setUser}/>} path="/sign-up"/>
             <Route element={<Profile/>} path="/profile/:username"/>
             <Route element={<Search/>} path="/search"/>
-            <Route element={<CreatePost/>} path="/create-post"/>
+            <Route element={<CreatePost user={user} setAlert={setAlert}/>} path="/create-post"/>
          </Routes>
       </BrowserRouter>
     </div>

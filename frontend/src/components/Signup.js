@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Form, Button } from "react-bootstrap"
+import { Form, Button, Alert } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
 export default function Signup({setAlert, setUser}) {
@@ -24,14 +24,14 @@ export default function Signup({setAlert, setUser}) {
             return res.json()    
         })
         .then((data) => {
-            setAlert({
-                variant: "success", 
-                message: "account created"
-            })
+            // setAlert({
+            //     variant: "success", 
+            //     message: "account created"
+            // })
             setUser(data.username)
             navigate("/")
         })
-        .catch((err) => console.log(err))  
+        .catch((err) => Alert(err))  
     }
 
     function updateUsername(e){
@@ -39,11 +39,11 @@ export default function Signup({setAlert, setUser}) {
     }
 
     function updateFirstName(e){
-        setUsername(e.target.value)
+        setFirstname(e.target.value) 
     }
 
     function updateLastName(e){
-        setUsername(e.target.value)
+        setLastName(e.target.value)
     }
 
     return <Form className="center-form">
