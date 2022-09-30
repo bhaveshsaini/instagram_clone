@@ -30,9 +30,13 @@ functions.getProfile = (user) => {
 }
 
 functions.getUserId = (user) => {
+    // const ret = 
     return sanityClient.fetch(`*[_type == "user" && username == $username]{
         _id
     }`, {username: user})
+
+    // return ret 
+    // RETURNING EMPTY RESPONSE
 }
 
 functions.createPost = (user, caption, image) => {

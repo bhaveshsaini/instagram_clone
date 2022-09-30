@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Button, Form } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
-
+ 
 import "../css/createpost.css"
 
 export default function CreatePost(user, setAlert) {
@@ -21,7 +21,19 @@ export default function CreatePost(user, setAlert) {
     }
 
     function makePost() {
-        
+        const formData = new FormData()
+        formData.append('user', user)
+        formData.append('caption', caption)
+        formData.append('file', file)
+        const requestOptions = {
+            method: "POST",
+            body: formData
+        }
+
+        fetch("/createPost", requestOptions).then((res) => {
+            navigate("/")
+        })
+        .catch((e) => console.log(e))
     }
 
     return (
