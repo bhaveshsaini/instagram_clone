@@ -54,4 +54,35 @@ functions.createPost = (user, caption, image) => {
     }))
 }
 
+functions.getAllPosts = () => {
+    return sanityClient.fetch(`*[_type == "post"]{
+        ...,
+        "username": author->username
+        photo{
+            asset->{
+                _id,
+                url
+            }
+        }
+    }`)
+}
+
+functions.getPostsOfFollowing = (username) => {
+    return sanityClient.fetch(`*[_type == "user" && username == $username]{
+        following[]->{
+            "posts":*[_type=="post" && references(^._id)]{
+                ...,
+                "username":author->username,
+                photo{
+                    asset->{
+                        _id,
+                        url
+                    }
+                }
+            }
+        }
+    }`, { username }
+    )
+}
+
 export default functions

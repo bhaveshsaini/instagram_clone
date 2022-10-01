@@ -39,4 +39,19 @@ app.post("/createPost", upload.single("file"), (req, res) => {
     .then((data) => res.json(data))
 })
 
+app.get("/getPostsOfFollowing", (req, res) => {
+    const user = req.query.user
+    functions.getPostsOfFollowing(user).then((data) => {
+        var posts = data[0].following
+        posts = posts.map((post) => post.posts)
+        posts = posts.flat(1)
+        res.json(posts)
+    }).catch((err) => {res.json([]); console.log(err)})
+})
+
+app.get("/getAllPosts", (req, res) => {
+    functions.getAllPosts(user).then((data) => res.json(data))
+})
+
+
 app.listen(3001, () => console.log("server running on 3001"))
