@@ -85,4 +85,17 @@ functions.getPostsOfFollowing = (username) => {
     )
 }
 
+functions.searchForUsername = (text) => {
+    return sanityClient.fetch(`*[_type == "user" && username match "${text}*"]{
+        ...,
+        "followers": count(*[_type == "user" && references(^._id)]),
+        photo{
+            asset->{
+                _id,
+                url
+            }
+        }
+    }`, {text}) 
+}
+
 export default functions

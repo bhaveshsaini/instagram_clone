@@ -53,5 +53,11 @@ app.get("/getAllPosts", (req, res) => {
     functions.getAllPosts(user).then((data) => res.json(data))
 })
 
+app.get("/searchForUsername", (req, res) => {
+    const text = req.query.text
+    functions.searchForUsername(text)
+    .then((data) => res.json(data))
+})
+
 
 app.listen(3001, () => console.log("server running on 3001"))
