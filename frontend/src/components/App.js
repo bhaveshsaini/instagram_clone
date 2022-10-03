@@ -45,7 +45,7 @@ function App() {
                   { user ? (
                   <Navbar.Text>
                     Signed in as
-                    <Link  style={{textDecoration: 'none'}} to={"/profile" + user}>{" " + user}</Link> | {" "}
+                    <Link  style={{textDecoration: 'none'}} to={"/profile/" + user}>{" " + user}</Link> | {" "}
                     <Button 
                       type='button' 
                       variant='primary' 
@@ -69,7 +69,7 @@ function App() {
             <Route element={<AllPosts user={user}/>} path="/" exact/>
             <Route element={<Login setAlert={setAlert} setUser={setUser}/>} path="/login"/>
             <Route element={<Signup setAlert={setAlert} setUser={setUser}/>} path="/sign-up"/>
-            <Route element={<Profile/>} path="/profile/:username"/>
+            <Route element={<Profile user={user}/>} path="/profile/:username"/>
             <Route element={<Search/>} path="/search"/>
             <Route element={<CreatePost user={user} setAlert={setAlert}/>} path="/create-post"/>
          </Routes>

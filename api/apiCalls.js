@@ -30,19 +30,20 @@ functions.getProfile = (user) => {
 }
 
 functions.getUserId = (user) => {
-    // const ret = 
-    return sanityClient.fetch(`*[_type == "user" && username == $username]{
+    console.log(JSON.parse(user))
+    let ret = sanityClient.fetch(`*[_type == "user" && username == $username]{
         _id
     }`, {username: user})
+    console.log(`ret = ${ret}`)
 
-    // return ret 
+    return ret 
     // RETURNING EMPTY RESPONSE
 }
 
 functions.createPost = (user, caption, image) => {
     return sanityClient.assets.upload("image", createReadStream(image.path), {
         filename: basename(image.path)
-    }).then((data) => functions.getUserId(user).then((ids) => {
+    }).then((data) => functions.getUserId(user)).then((ids) => {
         const id = ids[0]._id
         return sanityClient.create({
             _type: "post",
@@ -51,7 +52,7 @@ functions.createPost = (user, caption, image) => {
             description: caption,
             create_at: new Date()
         })
-    }))
+    })
 }
 
 functions.getAllPosts = () => {
@@ -97,5 +98,21 @@ functions.searchForUsername = (text) => {
         }
     }`, {text}) 
 }
+
+functions.getPosts = (username) => {
+    return sanityClient.fetch(
+      `*[_type == "post" && author->username == $username]{
+      ...,
+      "username": author->username,
+      photo{
+        asset->{
+          _id,
+          url
+        }
+      }
+    }`,
+      { username }
+    );
+  };
 
 export default functions

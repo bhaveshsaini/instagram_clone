@@ -3,6 +3,7 @@ import bodyParser from "body-parser"
 import functions from "./apiCalls.js"
 import multer from "multer"
 
+
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
@@ -57,6 +58,11 @@ app.get("/searchForUsername", (req, res) => {
     const text = req.query.text
     functions.searchForUsername(text)
     .then((data) => res.json(data))
+})
+
+app.get("/getPosts", (req, res) => {
+    const user = req.query.user
+    functions.getPosts(user).then((data) => res.json(data))
 })
 
 
