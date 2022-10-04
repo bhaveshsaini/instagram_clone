@@ -1,6 +1,7 @@
 import sanityClient from "./client.js"
 import { createReadStream } from "fs"
 import { basename } from "path"
+import { nanoid } from "nanoid"
 
 const functions = {}
 
@@ -115,4 +116,38 @@ functions.getPosts = (username) => {
     );
   };
 
+  functions.updateProfile = (user, first_name, last_name, bio, image) => {
+    if (image) {
+        return sanityClient.assets.upload("image", createReadStream(image.path), {filename: basename(image.path)}).then((data) => functions.getUserId(user).then((ids) =>
+            sanityClient.patch(ids[0]._id).set({first_name, last_name, bio, photo:{asset: {_ref: data.id}}}).commit()
+        ))
+    }
+
+    else {
+        functions.getUserId(user).then((ids) =>
+            sanityClient.patch(ids[0]._id).set({first_name, last_name, bio}).commit())
+    }
+  }
+
+  functions.addFollower = (user, followingId) => {
+    return functions.getUserId(user).then((ids) =>
+      sanityClient
+        .patch(ids[0]._id)
+        .setIfMissing({ following: [] })
+        .insert("after", "following[-1]", [
+          { _ref: followingId, _key: nanoid(), _type: "reference" },
+        ])
+        .commit()
+    );
+  };
+  
+  functions.removeFollower = (user, followingId) => {
+    return functions.getUserId(user).then((ids) =>
+      sanityClient
+        .patch(ids[0]._id)
+        .unset([`following[_ref=="${followingId}"]`])
+        .commit()
+    );
+  };
+  
 export default functions

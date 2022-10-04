@@ -46,15 +46,47 @@ export default function Profile({user}) {
         }).catch((err) => console.error(err))
     }
 
-    function followClick(){}
+    function followClick(){
+        if(owner) return
 
-    function hideEditCallback(){}
+        if(!following) {
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({user: user, id: profileData._id})
+            }
+            fetch("/addFollower", requestOptions)
+            .then((res) => res.json())
+            .then((_data) => updateProfile(params.username))
+        }
+
+        else{
+            const requestOptions = {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({user: user, id: profileData._id})
+            }
+            fetch("/removeFollower", requestOptions)
+            .then((res) => res.json())
+            .then((_data) => updateProfile(params.username))
+        }
+    }
+
+    function hideEditCallback(){
+            updateProfile(params.username)
+            setEditing(false)
+    }
 
     if(profileData == {}) return null
 
     return (
     <div className="profile">
         <h4>@{profileData.username}</h4>
+        <EditProfile user={user} show={editing} hideCallback={hideEditCallback} profileData={profileData}/>
 
         <div className="profile-data">
             <img src={profileData.photo ? profileData.photo.asset.url : "https://via.placeholder.com/80"} id="profile-img"/>

@@ -65,5 +65,20 @@ app.get("/getPosts", (req, res) => {
     functions.getPosts(user).then((data) => res.json(data))
 })
 
+app.post("/updateProfile", upload.single("file"), (req, res) => {
+    const body = req.body
+    functions.updateProfile(body.user, body.first_name, body.last_name, body.bio, req.file)
+    .then((data) => res.json(data))
+})
+
+app.post("/addFollower", (req, res) => {
+    const body = req.body
+    functions.addFollower(body.user, body.id).then((data) => res.json(data))
+})
+
+app.delete("/removeFollower", (req, res) => {
+    const body = req.body
+    functions.removeFollower(body.user, body.id).then((data) => res.json(data))
+})
 
 app.listen(3001, () => console.log("server running on 3001"))
