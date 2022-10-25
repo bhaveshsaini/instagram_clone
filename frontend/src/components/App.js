@@ -11,6 +11,7 @@ import Login from "./Login"
 import Profile from "./Profile"
 import Search from "./Search"
 import Signup from "./Signup"
+import Shopping from './shopping';
 
 function App() {
 
@@ -72,6 +73,7 @@ function App() {
             <Route element={<Profile user={user}/>} path="/profile/:username"/>
             <Route element={<Search/>} path="/search"/>
             <Route element={<CreatePost user={user} setAlert={setAlert}/>} path="/create-post"/>
+            <Route element={<Shopping />} path="/shopping"/>
          </Routes>
       </BrowserRouter>
     </div>
