@@ -30,7 +30,7 @@ function App() {
               <Navbar.Collapse>
                 <Nav className='me-auto'>
                   <LinkContainer to="/">
-                    <Nav.Link>Feed</Nav.Link>
+                    <Nav.Link>Home</Nav.Link>
                   </LinkContainer>
 
                   <LinkContainer to="/search">
@@ -39,6 +39,10 @@ function App() {
 
                   <LinkContainer to="/create-post">
                     <Nav.Link>Post</Nav.Link>
+                  </LinkContainer>
+
+                  <LinkContainer to="/shopping">
+                    <Nav.Link>Shopping</Nav.Link>
                   </LinkContainer>
                 </Nav>
 

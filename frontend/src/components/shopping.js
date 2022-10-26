@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {Button, Container, Card, Modal } from "react-bootstrap"
 
 export default function Shopping() {
@@ -33,14 +33,25 @@ export default function Shopping() {
         },
     ]
 
-    const [cart, setCart] = useState([{}])
+    const [cart, setCart] = useState([])
+    const [show, setShow] = useState(false)
 
-    function addToCart(itemIndex) {
-        setCart(items[itemIndex])
+    const handleClose = () => setShow(false)
+    const handleShow = () => setShow(true)
+
+    function removeItem(itemToRemove){
+        let newArr = []
+        cart.map((item) => {if(item.name != itemToRemove.name) newArr.push(item)})
+        setCart(newArr)
     }
+
+    useEffect(() => console.log(cart), [cart])
 
     return (
         <div>
+            <div className="m-3 d-flex justify-content-end">
+                <Button className="" onClick={handleShow} variant="primary"><i class="fa fa-shopping-cart"></i> View Cart</Button>
+            </div>
             <Container className="d-flex flex-wrap">
                 {items.map((item, index) => (
                     <Card className="m-3" style={{ width: '18rem' }}>
@@ -50,13 +61,47 @@ export default function Shopping() {
                             <Card.Text>
                                 {item.description}
                                 <br/>
-                                {item.price}
+                                <b>{item.price}</b>
                             </Card.Text>
-                            <Button onClick={() => addToCart(index)} variant="success">Add to cart</Button>
+                            <Button onClick={() => setCart(cart.concat(items[index]))} variant="success">Add to cart</Button>
                         </Card.Body>
                     </Card>
                 ))}
             </Container>
+
+            <Modal scrollable={true} show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+                <Modal.Header closeButton>
+                <Modal.Title>Cart</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    {cart.length != 0 ? 
+                    cart.map((item) => (
+                        <Card className="mt-4">
+                            <Card.Body>
+                                <Card.Title>
+                                    <div className="d-flex justify-content-between">
+                                        {item.name}
+                                        <b>{item.price}</b>
+                                    </div>
+                                </Card.Title>
+                                <Card.Text>
+                                    {item.description}
+                                </Card.Text>
+                                <Button onClick={() => removeItem(item)} size="sm" variant="danger">Remove</Button>
+                            </Card.Body>
+                        </Card> 
+                    ))
+                    : 
+                    <h1>cart empty</h1>}
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleClose}>Close</Button>
+
+                    <Button variant="success">Checkout</Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     )
 }
