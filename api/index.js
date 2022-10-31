@@ -4,12 +4,13 @@ import functions from "./apiCalls.js"
 import multer from "multer"
 import coinbase from "coinbase-commerce-node"
 import dotenv from "dotenv"
+import cors from 'cors'
 dotenv.config()
-
 
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
+app.use(cors({origin: '*'}));
 
 // Coinbase setup
 const Client = coinbase.Client
@@ -99,11 +100,11 @@ app.post('/charge', (req, res) => {
         },
         pricing_type: 'fixed_price'
     }
+    console.log(req.body)
 
     Charge.create(chargeData, (err, response) => {
         if (err) res.status(400).send({message: err.message})
         else res.status(200).send(response)
-        console.log(response)
     })
 })
 

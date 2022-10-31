@@ -35,25 +35,38 @@ export default function Shopping() {
 
     const [cart, setCart] = useState([])
     const [total, setTotal] = useState(0)
-    const [show, setShow] = useState(false)
+    const [showModal1, setShowModal1] = useState(false)
 
-    const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
+    const handleCloseModal1 = () => setShowModal1(false)
+    const handleShowModal1 = () => setShowModal1(true)
 
-    function removeItem(itemToRemove){ //this removes all duplicate items. change it to a way to only delete element which is clicked
+    function removeItem(itemToRemove){ //this removes all duplicate items. change it to a way to only delete element which is clicked; might need to use an ID for each item
         let newArr = []
         cart.map((item) => {if(item.name != itemToRemove.name) newArr.push(item)})
         setCart(newArr)
-
         setTotal(total - itemToRemove.price)
     }
 
-    useEffect(() => console.log(cart), [cart])
+    function checkout(){
+
+        if(total > 0) {
+            fetch("http://localhost:3001/charge", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({name: "Shopping", description: "Shopping", amount: total})
+            })
+            .then((res) => res.json())
+            .then((data) => {window.location.replace(data.hosted_url)})
+            .catch((err) => console.log(err))
+        }
+    }
 
     return (
         <div>
             <div className="m-3 d-flex justify-content-end">
-                <Button className="" onClick={handleShow} variant="primary"><i class="fa fa-shopping-cart"></i> View Cart</Button>
+                <Button className="" onClick={handleShowModal1} variant="primary"><i class="fa fa-shopping-cart"></i> View Cart</Button>
             </div>
             <Container className="d-flex flex-wrap">
                 {items.map((item, index) => (
@@ -72,7 +85,7 @@ export default function Shopping() {
                 ))}
             </Container>
 
-            <Modal scrollable={true} show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+            <Modal scrollable={true} show={showModal1} onHide={handleCloseModal1} backdrop="static" keyboard={false}>
                 <Modal.Header closeButton>
                 <Modal.Title><b>Cart</b></Modal.Title>
                 </Modal.Header>
@@ -101,18 +114,18 @@ export default function Shopping() {
                             <h3 className="text-muted">Cart Empty</h3>                                                                                       
                         </div>
                     }
-                    <hr />
-                    <div className="d-flex justify-content-between">
+                </Modal.Body>
+
+                <Modal.Footer className="d-flex justify-content-between">
+                    <div className="d-block">
                         <h4 className="text-muted">Total</h4>
                         <h4>${total}</h4>
                     </div>
-                </Modal.Body>
 
-                <Modal.Footer>
-                    <Button variant="danger" onClick={handleClose}>Close</Button>
-
-                    <Button variant="success">Checkout</Button>                                                                    
-                     {/* implement checkout button  */}
+                    <div>
+                        <Button className="m-2" variant="danger" onClick={handleCloseModal1}>Close</Button>
+                        <Button disabled={total == 0 ? true : false} variant="success" onClick={checkout}>Checkout</Button>                                                                    
+                    </div>
                 </Modal.Footer>
             </Modal>
         </div>
